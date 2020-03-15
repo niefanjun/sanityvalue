@@ -1,0 +1,49 @@
+const merge = require('webpack-merge');
+const common = require('./webpack.common.config.js');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const autoHtml = require('../lib/autoHtml.js');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const { entriesList, HtmlWebpackPluginList } = autoHtml('./src/view/','./template',true);
+
+console.log(HtmlWebpackPluginList,'html');
+
+const prod = merge(common, {
+	mode: 'production',
+	entry: entriesList,
+	output: {
+		filename: 'js/[name].[chunkhash:8].bundle.js',
+	},
+	optimization: {
+		minimizer: [
+			new TerserPlugin(),
+		],
+		splitChunks: {
+			chunks: 'all',
+			minSize: 30000,
+			maxSize: 0,
+			minChunks: 1,
+			cacheGroups: {
+				framework: {
+					test: 'framework',
+					name: 'framework',
+					enforce: true,
+				},
+				vendors: {
+					priority: -10,
+					test: /node_modules/,
+					name: 'vendor',
+					enforce: true
+				}
+			}
+		}
+	},
+	plugins: [
+		...HtmlWebpackPluginList,
+		new CleanWebpackPlugin(),
+	]
+});
+
+module.exports = prod
