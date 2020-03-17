@@ -1,18 +1,15 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.config.js');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const path = require('path'); 
+const autoHtml = require('../lib/autoHtml.js');
 
-const prod = merge(common, {
+const { entriesList, HtmlWebpackPluginList } = autoHtml('./src/view/','./template',true);
+
+const analyzer = merge(common, {
 	mode: 'production',
-	entry: {
-		index: './src/index.js',
-		framework: ['react','react-dom'],
-	},
+	entry: entriesList,
 	output: {
 		filename: 'js/[name].[chunkhash:8].bundle.js',
 	},
@@ -40,23 +37,11 @@ const prod = merge(common, {
 			}
 		}
 	},
-	resolve: {
-		alias: {
-			'@ant-design/icons/lib/dist$': path.resolve(__dirname, '../src/icons.ts')
-		}
-	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			filename: 'index.html',
-			template: 'public/index.html',
-			inject: 'body',
-			minify: {
-				removeComments: true,
-				collapseWhitespace: true
-			}
-		}),
+		...HtmlWebpackPluginList,
 		new CleanWebpackPlugin(),
 		new BundleAnalyzerPlugin()
 	]
 });
-module.exports = prod
+
+module.exports = analyzer

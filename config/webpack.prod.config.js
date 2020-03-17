@@ -1,14 +1,10 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.config.js');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const autoHtml = require('../lib/autoHtml.js');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const { entriesList, HtmlWebpackPluginList } = autoHtml('./src/view/','./template',true);
-
-console.log(HtmlWebpackPluginList,'html');
 
 const prod = merge(common, {
 	mode: 'production',
