@@ -6,7 +6,7 @@ const autoHtml = require('../lib/autoHtml.js');
 const { entriesList, HtmlWebpackPluginList } = autoHtml('./src/view/','./template');
 
 const dev =  merge(common, {
-	mode: 'production',
+	mode: 'development',
 	entry: entriesList,
 	output: {
 		filename: 'js/[name].[hash:8].bundle.js',
