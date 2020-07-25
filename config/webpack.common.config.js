@@ -1,3 +1,6 @@
+/**
+@type {import('webpack').Configuration}
+**/
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const config = {
@@ -7,6 +10,11 @@ const config = {
 	},
 	module: {
 		rules: [
+			{
+				test: /\.(tsx|ts)$/,
+				use: 'ts-loader',
+				exclude: /node_modules/,
+			},
 			{
 				test: /\.(png|jpg|gif)$/,
 				use: {
@@ -48,7 +56,8 @@ const config = {
 	resolve: {
 		alias: {
 			'@images': path.resolve(__dirname, '../src/images')
-		}
+		},
+		extensions: ['.js','.ts','.jsx','.tsx']
 	},
 	plugins: [
 		new MiniCssExtractPlugin({

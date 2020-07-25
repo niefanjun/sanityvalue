@@ -6,10 +6,11 @@ class Home extends React.Component {
 		super(props);
 		console.log('test');
 	}
+	name = '1231231';
 	render() {
 		return (
 			<div className="App">
-				test123
+				{this.name}
 			</div>
 		)
 	}
