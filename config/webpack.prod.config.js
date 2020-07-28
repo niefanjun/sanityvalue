@@ -16,11 +16,12 @@ const prod = merge(common, {
 		minimizer: [
 			new TerserPlugin(),
 		],
+		runtimeChunk: true,
 		splitChunks: {
 			chunks: 'all',
 			minSize: 30000,
 			maxSize: 0,
-			minChunks: 1,
+			minChunks: 2,
 			cacheGroups: {
 				framework: {
 					test: 'framework',
